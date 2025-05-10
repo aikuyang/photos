@@ -1,12 +1,16 @@
+// App.jsx
 import React from "react";
-import PhotoCarousel from "./PhotoCarousel";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CarouselPage from "./pages/CarouselPage";
+import AboutPage from "./pages/AboutPage";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <PhotoCarousel />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<CarouselPage />} />
+        <Route path="/about" element={<AboutPage />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;

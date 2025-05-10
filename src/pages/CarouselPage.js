@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
-import { MdEmail } from "react-icons/md";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import SocialPanel from "./SocialPanel";
 import "./PhotoCarousel.scss";
 
 // 自動載入所有 WebP 圖片
 const importAll = (r) => r.keys().map(r);
 const images = importAll(
-    require.context("./assets/images", false, /\.webp$/)
+    require.context("../assets/images", false, /\.webp$/)
 );
 
-export default function PhotoCarousel() {
+export default function CarouselPage() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [fadeTransition, setFadeTransition] = useState(false);
     const touchStartX = useRef(null);
@@ -16,9 +16,14 @@ export default function PhotoCarousel() {
     const autoPlayRef = useRef();
     const thumbnailRefs = useRef([]);
 
-    const nextImage = () => {
-        triggerFade(() => setActiveIndex((prev) => (prev + 1) % images.length));
-    };
+    const nextImage = useCallback(() => {
+        setActiveIndex((prev) => (prev + 1) % images.length);
+    }, [images.length]);
+
+    useEffect(() => {
+        const intervalId = setInterval(nextImage, 5000);
+        return () => clearInterval(intervalId);
+    }, [nextImage]);
 
     const prevImage = () => {
         triggerFade(() =>
@@ -95,7 +100,7 @@ export default function PhotoCarousel() {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
         >
-            <div className="carousel-background">
+            <div className={`carousel-background ${fadeTransition ? "fade" : ""}`}>
                 <img
                     key={activeIndex}
                     src={images[activeIndex]}
@@ -104,21 +109,7 @@ export default function PhotoCarousel() {
                 <div className="overlay" />
             </div>
 
-            <div className="social-panel">
-                <a
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-
-                        const pieces = ["YWl", "rdX", "lhbm", "dAZ2", "1haWw", "uY29t"];
-                        const encoded = pieces.join("");
-                        const email = atob(encoded);
-                        window.location.href = "mailto:" + email;
-                    }}
-                >
-                    <MdEmail /> CONTACT
-                </a>
-            </div>
+            <SocialPanel />
 
             <div className="thumbnail-container">
                 {images.map((img, index) => (
