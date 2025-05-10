@@ -8,7 +8,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<CarouselPage />} />
+        <Route path="/photos" element={<CarouselPage />} />
         <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>

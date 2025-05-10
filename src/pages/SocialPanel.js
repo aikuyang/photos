@@ -31,7 +31,7 @@ export default function SocialPanel() {
                 ABOUT
             </Link>
             <Link
-                to="/"
+                to="/photos"
                 className={`about-button ${isHome ? "active" : ""}`}
             >
                 TOP
